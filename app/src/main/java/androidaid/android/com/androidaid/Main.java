@@ -1,21 +1,12 @@
 package androidaid.android.com.androidaid;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import androidaid.android.com.androidaid.networking.InternetSpeed;
+import androidaid.android.com.androidaid.persistance.UnexpectedExceptionHandler;
 import androidaid.android.com.androidaid.program_flow.Constants;
 import androidaid.android.com.androidaid.storage.InternalStorageManager;
 
@@ -60,11 +51,15 @@ public class Main extends Activity {
         System.out.println("[sproc32.Main]: Contents of internal storage messenger field text file: " + "\n" + messenger_field_text);
         System.out.println("[sproc32.Main]: Contents of internal storage general field text file: " + "\n" + general_field_text);
 
+        //////////////////////////////////////////////////////////////////////
 
         InternetSpeed.isOnline();
 
+        Thread.setDefaultUncaughtExceptionHandler(new UnexpectedExceptionHandler(this));
 
-        /////////////////////////////////////////////////////////////////////////////////////////
+        if(getIntent().getBooleanExtra("crash", false)) {
+            System.out.println("[sproc32.persistance.Main]: APP RESTARTED AFTER A CRASH!");
+        }
 
         System.out.println("[sproc32.main]: Starting service");
         Intent startServiceIntent = new Intent(getApplicationContext(), MainAccessService.class);

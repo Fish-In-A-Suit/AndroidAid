@@ -213,6 +213,7 @@ public class AccessibilityEventManager {
 
         }
 
+        throw new NullPointerException();
 
     }
 
