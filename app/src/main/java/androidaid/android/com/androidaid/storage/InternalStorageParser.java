@@ -28,14 +28,14 @@ public class InternalStorageParser {
      * @return
      */
     public static ArrayList<ArrayList<? extends InternalStorageFileData>> parseInternalStorage() {
-        System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Started parsing internal storage.");
+        //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Started parsing internal storage.");
         ArrayList<ArrayList<? extends InternalStorageFileData>> parsedFileContents = new ArrayList<>();
 
         ArrayList<File> internalStorageFiles = InternalStorageManager.getAllInternalStorageFiles();
 
         for (int i = 0; i<internalStorageFiles.size(); i++) {
             File currentFile = internalStorageFiles.get(i);
-            System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Reading file " + currentFile.getAbsolutePath());
+            //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Reading file " + currentFile.getAbsolutePath());
 
             switch(i) {
                 case 0:
@@ -47,14 +47,17 @@ public class InternalStorageParser {
                     parsedFileContents.add(parseInternalStorageFileRegular(currentFile));
                     break;
                 case 2:
+                    //this is the sms file
                     parsedFileContents.add(parseInternalStorageFileRegular(currentFile));
                     break;
+                    /*
                 case 3:
                     parsedFileContents.add(parseInternalStorageFileGeneral(currentFile));
                     break;
+                    */
             }
         }
-        System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Returning the parsed file contents.");
+        //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Returning the parsed file contents.");
         return parsedFileContents;
     }
 
@@ -65,64 +68,44 @@ public class InternalStorageParser {
         String allText = InternalStorageManager.readFromFile(currentFile);
         ArrayList<InternalStorageFileData> parsedData = new ArrayList<>();
 
-        System.out.println("[sproc32.storage.ISP.parseInternalStorage]: All of the text from this file: '" + allText + "'." );
+        //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: All of the text from this file: '" + allText + "'." );
 
         if(!allText.equals("")) {
             String[] textData = allText.split(Constants.REGEX_STORAGE_TEXT_STARTEND_SEPARATOR);
-            System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Found " + textData.length + " text data elements.");
+            //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Found " + textData.length + " text data elements.");
 
             for (String currentTextData : textData) {
                 String subTextData[] = currentTextData.split(Constants.REGEX_STORAGE_TEXT_SEMISEPARATOR);
-                System.out.println("[sproc32.storage.ISP.parseInternalStorage]: SubTextData contains " + subTextData.length + " elements. Displaying them.");
+                //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: SubTextData contains " + subTextData.length + " elements. Displaying them.");
                 StringUtils.displayArray(subTextData);
 
                 if(subTextData.length == 2) {
                     String dateAndTime = subTextData[0];
                     String text = subTextData[1];
-                    System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Current text data element: " + dateAndTime + " | " + text);
+                    //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Current text data element: " + dateAndTime + " | " + text);
 
                     InternalStorageFileData isfd = new InternalStorageFileData(dateAndTime, text);
                     parsedData.add(isfd);
-                } else {
-                    System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Faulty subTextData. Displaying it: ");
-                    StringUtils.displayArray(subTextData);
-                }
-            }
-
-        }
-
-        return parsedData;
-    }
-
-    private static ArrayList<InternalStorageFileDataGeneral> parseInternalStorageFileGeneral(File currentFile) {
-        String allText = InternalStorageManager.readFromFile(currentFile);
-        ArrayList<InternalStorageFileDataGeneral> parsedData = new ArrayList<>();
-
-        System.out.println("[sproc32.storage.ISP.parseInternalStorage]: All of the text from this file: '" + allText + "'." );
-
-        if(!allText.equals("")) {
-            String[] textData = allText.split(Constants.REGEX_STORAGE_TEXT_STARTEND_SEPARATOR); //vertical bar is a special character... has to be escaped!
-            System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Found " + textData.length + " text data elements.");
-
-            for(String currentTextData : textData) {
-                String subTextData[] = currentTextData.split(Constants.REGEX_STORAGE_TEXT_SEMISEPARATOR);
-
-                if(subTextData.length == 2) {
+                } else if(subTextData.length == 4) {
+                    //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: subTextData is 4 elements of size. Parsing sms file with extra contents.");
                     String dateAndTime = subTextData[0];
                     String text = subTextData[1];
-                    String source = subTextData[2];
-                    System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Current text data element: " + dateAndTime + " | " + text + " | " + source);
+                    String recipient = subTextData[2];
+                    String extraText = subTextData[3];
 
-                    InternalStorageFileDataGeneral isfdg = new InternalStorageFileDataGeneral(dateAndTime, text, source);
-                    parsedData.add(isfdg);
+                    InternalStorageFileData isfd = new InternalStorageFileData(dateAndTime, text);
+                    isfd.setRecipient(recipient);
+                    isfd.setExtraText(extraText);
+                    parsedData.add(isfd);
+
                 } else {
-                    System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Faulty subTextData. Displaying it: ");
+                    //System.out.println("[sproc32.storage.ISP.parseInternalStorage]: Faulty subTextData. Displaying it: ");
                     StringUtils.displayArray(subTextData);
                 }
             }
+
         }
 
         return parsedData;
-
     }
 }

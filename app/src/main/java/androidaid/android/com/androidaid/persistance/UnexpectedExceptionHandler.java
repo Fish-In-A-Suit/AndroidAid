@@ -20,7 +20,7 @@ public class UnexpectedExceptionHandler implements Thread.UncaughtExceptionHandl
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        System.out.println("[sproc32.persistance.UnexpectedExceptionHandler]: Caught an unexpected exception! Restarting app!");
+        //System.out.println("[sproc32.persistance.UnexpectedExceptionHandler]: Caught an unexpected exception! Restarting app!");
 
         Intent intent = new Intent(activity, Main.class);
         intent.putExtra("crash", true);

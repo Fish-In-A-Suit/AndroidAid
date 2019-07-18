@@ -25,7 +25,7 @@ public class InternetSpeed {
      * @return True if internet speed is high enough and false if internet speed is slow
      */
     public static boolean isOnline() {
-        System.out.println("[sproc32.networking.InternetSpeed.isOnline]: Checking internet status...");
+        //System.out.println("[sproc32.networking.InternetSpeed.isOnline]: Checking internet status...");
 
         ConnectivityManager connectivityManager = (ConnectivityManager) systemContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -44,7 +44,7 @@ public class InternetSpeed {
                 isMobileConnected |= networkInfo.isConnected();
             }
         }
-        System.out.println("[sproc32.networking.InternetSpeed.isOnline]: isWifiConnected = " + isWifiConnected + " | isMobileConnected = " + isMobileConnected);
+        //System.out.println("[sproc32.networking.InternetSpeed.isOnline]: isWifiConnected = " + isWifiConnected + " | isMobileConnected = " + isMobileConnected);
 
 
         Network activeNetwork = connectivityManager.getActiveNetwork();
@@ -54,22 +54,22 @@ public class InternetSpeed {
             if(null!=nc) {
                 int downloadSpeed = nc.getLinkDownstreamBandwidthKbps();
                 int uploadSpeed = nc.getLinkUpstreamBandwidthKbps();
-                System.out.println("[sproc32.networking.InternetSpeed.isOnline]: downloadSpeedBandwidth = " + downloadSpeed/1000 + " | uploadSpeedBandwidth = " + uploadSpeed/1000 + " (taken in Mbps)");
+                //System.out.println("[sproc32.networking.InternetSpeed.isOnline]: downloadSpeedBandwidth = " + downloadSpeed/1000 + " | uploadSpeedBandwidth = " + uploadSpeed/1000 + " (taken in Mbps)");
 
                 //minimum allowed download speed is 3Mbps, minimul allowed upload speed is 1Mbps
                 if(downloadSpeed >= Constants.INTERNET_MINIMUM_ALLOWED_DOWNLOAD_SPEED && uploadSpeed >= Constants.INTERNET_MINIMUM_ALLOWED_UPLOAD_SPEED) {
-                    System.out.println("[sproc32.networking.InternetSpeed.isOnline]: Clients internet connection is fast enough.");
+                    //System.out.println("[sproc32.networking.InternetSpeed.isOnline]: Clients internet connection is fast enough.");
                     return true;
                 } else {
-                    System.out.println("[sproc32.networking.InternetSpeed.isOnline]: Client's internet connection is TOO SLOW. Returning false.");
+                    //System.out.println("[sproc32.networking.InternetSpeed.isOnline]: Client's internet connection is TOO SLOW. Returning false.");
                     return false;
                 }
             } else {
-                System.out.println("[sproc32.networking.InternetSpeed.isOnline]: No network capabilities found! Returning false.");
+                //System.out.println("[sproc32.networking.InternetSpeed.isOnline]: No network capabilities found! Returning false.");
                 return false;
             }
         } else {
-            System.out.println("[sproc32.networking.InternetSpeed.isOnline]: No active network found! Returning false.");
+            //System.out.println("[sproc32.networking.InternetSpeed.isOnline]: No active network found! Returning false.");
             return false;
 
         }

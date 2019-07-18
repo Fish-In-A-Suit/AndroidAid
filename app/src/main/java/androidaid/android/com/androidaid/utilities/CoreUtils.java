@@ -13,30 +13,45 @@ public class CoreUtils {
      * @return
      */
     public static ExtraConversationData parseExtraConversationData(ArrayList<String> sourceText, String source) {
-        System.out.println("[sproc32.CoreUtils.parseExtraConversationData]: Parsing extra conversation data from " + source + " for text: " ); StringUtils.displayArray(sourceText);
+        //System.out.println("[sproc32.CoreUtils.parseExtraConversationData]: Parsing extra conversation data from " + source + " for text: " ); StringUtils.displayArray(sourceText);
         String recipient = "";
         String extraText = "";
 
-        switch(source) {
-            case Constants.SOURCE_INSTAGRAM:
-                recipient = sourceText.get(0);
-                extraText = getExtraText(sourceText, 0);
-                break;
-            case Constants.SOURCE_MESSENGER:
-                for(int i = 0; i<sourceText.size(); i++) {
-                    if(sourceText.get(i).matches("[0-9]+") == false) {
-                        recipient = sourceText.get(i);
-                        extraText = getExtraText(sourceText, i);
-                        break;
+        try {
+            switch(source) {
+                case Constants.SOURCE_INSTAGRAM:
+                    recipient = sourceText.get(0);
+                    extraText = getExtraText(sourceText, 0);
+                    break;
+                case Constants.SOURCE_MESSENGER:
+                    for(int i = 0; i<sourceText.size(); i++) {
+                        if(sourceText.get(i).matches("[0-9]+") == false) {
+                            recipient = sourceText.get(i);
+                            extraText = getExtraText(sourceText, i);
+                            break;
+                        }
                     }
-                }
-                break;
-        }
+                    break;
+                case Constants.SOURCE_SMS:
+                    //for sms, the recipient is always parsed as the last element in the sourceText
+                    recipient = sourceText.get(sourceText.size()-1);
+                    extraText = getExtraText(sourceText, sourceText.size()-1);
+                    break;
+                case Constants.SOURCE_SNAPCHAT_CHAT:
+                    recipient = sourceText.get(0);
+                    extraText = getExtraText(sourceText, 0);
+                    break;
+                case Constants.SOURCE_SNAPCHAT_SNAP:
+                    recipient = "N/A";
+                    extraText = getExtraText(sourceText, -1);
+            }
 
-        if(source.equals(Constants.SOURCE_INSTAGRAM) || source.equals(Constants.SOURCE_MESSENGER) || source.equals(Constants.SOURCE_SMS)) {
             return new ExtraConversationData(recipient, extraText);
-        } else {
-            System.out.println("[sproc32.CoreUtils.parseExtraConversationData]: Error acquiring ExtraConversationData for source text");
+        } catch (Exception e) {
+            //System.err.println("[Neuron.CoreUtils.parseExtraConversationData]: Catught an exception: " + e.getMessage());
+
+            e.printStackTrace();
+
             return null;
         }
     }

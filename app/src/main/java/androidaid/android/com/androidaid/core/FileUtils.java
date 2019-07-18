@@ -18,7 +18,7 @@ public class FileUtils {
             if(i == dirs.length-1) {
                 finalRp = dirs[i];
 
-                System.out.println("[sproc32.core.FileUtils.getRelativePath]: Selected relative path = " + finalRp);
+                //System.out.println("[sproc32.core.FileUtils.getRelativePath]: Selected relative path = " + finalRp);
             }
         }
 

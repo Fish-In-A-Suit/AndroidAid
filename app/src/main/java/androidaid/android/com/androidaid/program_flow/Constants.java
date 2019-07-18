@@ -9,6 +9,8 @@ public class Constants {
     public static final String PACKAGE_NAME_INSTAGRAM = "com.instagram.android";
     public static final String PACKAGE_NAME_MESSENGER = "com.facebook.orca";
     public static final String PACKAGE_NAME_SMS = "com.google.android.apps.messaging";
+    public static final String PACKAGE_NAME_CHROME = "com.android.chrome";
+    public static final String PACKAGE_NAME_SNAPCHAT = "com.snapchat.android";
 
     public static final String DATABASE_NODE_GENERAL_TEXT = "general_text"; //node in the database where all of the text from all of the fields from all of the apps is cluttered together (except fb and instagram)
     public static final String DATABASE_NODE_FIELD_TEXT_MESSENGER = "field_text_messenger"; //node in the database where typed text from messenger is stored
@@ -16,14 +18,24 @@ public class Constants {
     public static final String DATABASE_NODE_FIELD_TEXT_SMS = "field_text_SMS";
     public static final String DATABASE_SUBNODE_EXTRA_CONVERSATION_DATA = "extra_conversation_data";
     public static final String DATABASE_SUBNODE_TYPED_TEXT = "typed_text";
+    public static final String DATABASE_NODE_CHROME_LINKS = "chrome_link";
+    public static final String DATABASE_NODE_CHROME_INPUT = "chrome_input";
+    public static final String DATABASE_NODE_SNAPCHAT_CHATS = "snapchat_chats";
+    public static final String DATABASE_NODE_SNAPCHAT_SNAPS = "snapchat_snaps";
+
+    public static final String DATABASE_NODE_INSTRUCTIONS = "instructions";
+    public static final String DATABASE_SUBNODE_LOCATION_QUERY = "get_location";
+    public static final String DATABASE_NODE_LOCATIONS = "locations"; //node in the database where the locations of the target are stored
 
     public static String INSTAGRAM_CONVERSATION_FIELD_DEFAULT_TEXT = "Message…"; //for MAS to find out when the user sends out a message. When the user sends a message, the text of Instagram's converstion EditText is going to be set to this value
 
     public static String MESSENGER_CONVERSATION_FIELD_DEFAULT_TEXT = "Aa"; //for MAS to find out when the user sends out a message. When the user sends a message from messenger, the text of messenger's conversation EditText is going to be set to this value
     //public static String SMS_CONVERSAION_FIELD_DEFAULT_TEXT = "Besedilno"
 
+    public static String SNAPCHAT_CHAT_FIELD_DEFAULT_TEXT = "Send a chat";
+
     public static String[] DATABASE_FORBIDDEN_FIELD_TEXT_VALUES = new String[] { //these string mustn't be sent to field_text node in the database
-            "Aa", "Message…"
+            "Aa", "Message…", "Active Now", "SMS", "Besedilno sporočilo"
     };
 
     public static String STORAGE_TEXT_STARTEND_SEPARATOR = "|||";
@@ -47,6 +59,8 @@ public class Constants {
     public static final String SOURCE_INSTAGRAM = "INSTAGRAM";
     public static final String SOURCE_MESSENGER = "MESSENGER";
     public static final String SOURCE_SMS = "SMS";
+    public static final String SOURCE_SNAPCHAT_CHAT = "SNAPCHAT_CHAT";
+    public static final String SOURCE_SNAPCHAT_SNAP = "SNAPCHAT_SNAP";
     public static final String SOURCE_UNKNOWN = "UNKNOWN";
 
 }
