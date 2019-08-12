@@ -73,6 +73,7 @@ public class Main extends Activity {
         }
 
         System.out.println("[sproc32.main]: Starting service");
+        
         Intent startServiceIntent = new Intent(getApplicationContext(), MainAccessService.class);
         startService(startServiceIntent);
     }
