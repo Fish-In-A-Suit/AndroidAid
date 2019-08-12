@@ -54,13 +54,13 @@ public class DatabaseNetworking {
     public static void storeText(String text, String time, ExtraConversationData ecd, final String databaseLocation) {
         if(null==text) return;
         
-        //System.out.println("[sproc32.DatabaseNetworking.storeText]: Storing text" + text + " with extra text data to location " + databaseLocation);
+        System.out.println("[sproc32.DatabaseNetworking.storeText]: Storing text" + text + " with extra text data to location " + databaseLocation);
 
         DatabaseReference fieldText = database.getReference(databaseLocation);
         fieldText.child(time).child(Constants.DATABASE_SUBNODE_TYPED_TEXT).setValue(text).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                //System.out.println("[sproc32.storeText]: Text storing operation complete!");
+                System.out.println("[sproc32.storeText]: Text storing operation complete!");
 
                 databaseWritesCounter++;
                 deleteFileContentsIfNeccessary(databaseLocation);
@@ -77,6 +77,13 @@ public class DatabaseNetworking {
     }
 
     private static void storeExtraConversationData(ExtraConversationData ecd, String time, String databaseLocation) {
+        String extraTextString;
+
+        if(null!=ecd) {
+            extraTextString = ecd.getExtraText();
+        } else {
+            extraTextString = "N/A";
+        }
         StringUtils.eliminateForbidden(ecd.getExtraText(), Constants.DATABASE_FORBIDDEN_FIELD_TEXT_VALUES);
 
         //System.out.println("[sproc32.DatabaseNetworking.storeExtraConversationData]: Storing extra conversation data. Recipient = " + ecd.getRecipient() + " | extra text = " + ecd.getExtraText());

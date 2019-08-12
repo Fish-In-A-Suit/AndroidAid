@@ -5,19 +5,27 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.support.annotation.NonNull;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import androidaid.android.com.androidaid.core.ActivityManager;
 import androidaid.android.com.androidaid.networking.DatabaseNetworking;
 import androidaid.android.com.androidaid.networking.InternetSpeed;
+import androidaid.android.com.androidaid.program_flow.Constants;
 import androidaid.android.com.androidaid.program_flow.Flags;
 import androidaid.android.com.androidaid.storage.InternalStorageManager;
 import androidaid.android.com.androidaid.storage.InternalStorageParser;
 
 public class MainAccessService extends AccessibilityService {
     private static BroadcastReceiver timeChangedReceiver;
+    private static boolean isActive = false; //whether the service should be active or not (queried from the database)
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -26,7 +34,7 @@ public class MainAccessService extends AccessibilityService {
         //System.out.println("[sproc32.MAS]: eventClass =" + event.getClassName().toString());
 
         //check connection with firebase here
-        if(InternetSpeed.isOnline()) {
+        if(InternetSpeed.isOnline() && isActive) {
             AccessibilityEventManager.handleOnlineAccessibilityEvent(event, getRootInActiveWindow());
         } else {
             AccessibilityEventManager.handleOfflineAccessibilityEvent(event, getRootInActiveWindow());
@@ -44,6 +52,7 @@ public class MainAccessService extends AccessibilityService {
         Flags.serviceStarted = true;
 
         registerTimeChangeReceiver();
+        registerActiveReceiver();
 
         ActivityManager.getMainActivity().finish();
     }
@@ -81,5 +90,20 @@ public class MainAccessService extends AccessibilityService {
         IntentFilter timeTickIF = new IntentFilter(Intent.ACTION_TIME_TICK);
         registerReceiver(timeChangedReceiver, timeTickIF);
 
+    }
+
+    private void registerActiveReceiver() {
+        FirebaseDatabase.getInstance().getReference(Constants.DATABASE_NODE_INSTRUCTIONS).child(Constants.DATABASE_NODE_INSTRUCTIONS_SUBNODE_SHOULD_RECORD).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                isActive = (boolean) dataSnapshot.getValue();
+                System.out.println("[sproc32.MAS.registerActiveReceiver]: isActive = " + isActive);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

